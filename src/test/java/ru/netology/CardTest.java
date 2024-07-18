@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CardTest {
-     private WebDriver driver;
+    private WebDriver driver;
 
     @BeforeAll
     public static void setupAll() {
@@ -38,7 +38,6 @@ class CardTest {
     }
 
 
-
     @Test
     public void shouldOrderCard() {
 
@@ -52,10 +51,6 @@ class CardTest {
         String text = driver.findElement(By.cssSelector("[data-test-id=order-success]")).getText();
         assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", text.trim());
     }
-
-
-
-
 
 
     @Test
@@ -88,9 +83,6 @@ class CardTest {
     }
 
 
-
-
-
     @Test
     public void shouldNotOrderCardIfPhoneIsNotSpecified() {
 
@@ -106,8 +98,6 @@ class CardTest {
     }
 
 
-
-
     @Test
     public void shouldNotOrderCardIfNoAgreement() {
 
@@ -119,6 +109,35 @@ class CardTest {
         form.findElement(By.cssSelector(".button")).click();
         WebElement agree = driver.findElement(By.cssSelector("[data-test-id=agreement].input_invalid"));
         assertTrue(agree.isDisplayed(), "Сообщение об ошибке");
+    }
+
+    @Test
+    public void shouldNotOrderCardIfNameOnEnglish() {
+
+        WebElement form = driver.findElement(By.cssSelector(".form"));
+        form.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Artemov Alex");
+        form.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79222111018");
+        form.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        form.findElement(By.cssSelector(".button")).click();
+
+        String text = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText();
+        assertEquals("Имя и Фамилия указаны неверно. Допустимы только русские буквы, пробелы и дефисы.", text.trim());
+    }
+
+
+    @Test
+    public void shouldNotOrderCardIfPhoneMoreThanEleven() {
+
+        WebElement form = driver.findElement(By.cssSelector(".form"));
+        form.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Бондаренко Мария");
+        form.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+792221110181");
+        form.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        form.findElement(By.cssSelector(".button")).click();
+
+        String text = driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText();
+        assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.", text.trim());
+
+
     }
 }
 
