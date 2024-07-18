@@ -1,0 +1,1 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/7b00x995gm96hvii?svg=true)](https://ci.appveyor.com/project/KseniiaVv/test-interface)
